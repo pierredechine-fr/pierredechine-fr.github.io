@@ -11,22 +11,10 @@ License
 
 Features
 -----------
-
-* Easy to use, fat-free HTML and CSS code.
-* 7 ready-made templates for most common tasks
-* Responsive design
-* High overral quality, the template does worth to be premium.
-
-
-Bug tracker
------------
-
-Found a bug? Please create an issue here on GitHub! 
-https://github.com/pozh/Progressus/issues
+Product Gallery
+- To add product, put product images under images/product folder.
+- Add new item to `./assets/data/products.json` 
+- the website will read info from products.json to load gallery automatically.
 
 
-Credits
--------
-* Design and development: **Sergey Pozhilov** - http://pozhilov.com
-* Photos used in template: **Unsplash** - http://unsplash.com
-* More free templates by Sergey: http://gettemplate.com
+
