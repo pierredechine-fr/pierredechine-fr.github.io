@@ -1,11 +1,11 @@
-const language = (document.documentElement.lang || 'en').toLowerCase()
+const language = (document.documentElement.lang || 'fr').toLowerCase()
 const footerFileByLanguage = {
-  fr: 'footer-fr.html',
+  fr: 'footer.html',
   zh: 'footer-zh.html',
-  en: 'footer.html',
+  en: 'footer-en.html',
 }
 
-const footerFile = footerFileByLanguage[language] || footerFileByLanguage.en
+const footerFile = footerFileByLanguage[language] || footerFileByLanguage.fr
 
 fetch(`./${footerFile}`)
   .then((response) => {
