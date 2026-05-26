@@ -12,9 +12,10 @@ fetch(`./${footerFile}`)
     if (!response.ok) {
       throw new Error(`Failed to load ${footerFile}: ${response.status}`)
     }
-    return response.text()
+    return response.arrayBuffer()
   })
-  .then((data) => {
+  .then((buffer) => {
+    const data = new TextDecoder('utf-8').decode(buffer)
     const footerTarget = document.getElementById('footer')
     if (footerTarget) {
       footerTarget.innerHTML = data
