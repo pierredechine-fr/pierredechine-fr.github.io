@@ -4,7 +4,7 @@ var map;
 
 function init() {
 	var mapOptions = {
-		center: new google.maps.LatLng(29.7063428,-95.40526,17),
+		center: new google.maps.LatLng(48.9587, 2.8906),
 		zoom: 17,
 		zoomControl: true,
 		zoomControlOptions: {
@@ -103,7 +103,7 @@ function init() {
 	var mapElement = document.getElementById('map');
 	var map = new google.maps.Map(mapElement, mapOptions);
 	var locations = [
-	
+		['PierreDeChine', 48.9587, 2.8906],
 	];
 
 	for (i = 0; i < locations.length; i++) {
