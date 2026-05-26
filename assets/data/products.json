@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Product 1",
+    "image": "image1.png",
+    "description": "Premium quality granite with exceptional durability and elegant finish"
+  },
+  {
+    "id": 2,
+    "name": "Product 2",
+    "image": "image2.png",
+    "description": "Luxurious marble perfect for sophisticated interiors and countertops"
+  },
+  {
+    "id": 3,
+    "name": "Product 3",
+    "image": "image3.png",
+    "description": "Natural stone offering timeless beauty and lasting performance"
+  },
+  {
+    "id": 4,
+    "name": "Product 4",
+    "image": "image4.png",
+    "description": "Expertly crafted stone solutions for residential and commercial spaces"
+  }
+]
