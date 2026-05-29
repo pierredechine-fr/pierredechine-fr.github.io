@@ -1,7 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {
-  loadGallery('./assets/data/products.json', 'product-gallery-row');
-});
-
 function loadGallery(jsonPath, containerId) {
   fetch(jsonPath)
     .then(res => res.json())
@@ -10,7 +6,6 @@ function loadGallery(jsonPath, containerId) {
       if (!container) return;
 
       container.innerHTML = '';
-
       renderProducts(container, products);
     })
     .catch(err => console.error(err));
@@ -22,8 +17,7 @@ function renderProducts(container, products) {
     return;
   }
 
-  const slider = createSlider(products);
-  container.appendChild(slider);
+  container.appendChild(createSlider(products));
 }
 
 function createSlider(products) {
@@ -33,7 +27,6 @@ function createSlider(products) {
   products.forEach(p => {
     const item = document.createElement('div');
     item.className = 'product-slide';
-
     item.innerHTML = cardHTML(p);
     slider.appendChild(item);
   });
