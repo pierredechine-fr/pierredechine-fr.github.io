@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Table Configurator</title>
+  <title>3D Model Gallery + Materials</title>
 
   <style>
     body {
@@ -11,7 +11,11 @@
       font-family: sans-serif;
     }
 
-    /* UI panel */
+    canvas {
+      display: block;
+    }
+
+    /* UI PANEL */
     #ui {
       position: absolute;
       top: 12px;
@@ -19,42 +23,44 @@
       background: white;
       padding: 10px;
       border-radius: 8px;
+      z-index: 20;
+    }
+
+    /* GALLERY */
+    #gallery {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      display: flex;
+      gap: 10px;
       z-index: 10;
     }
 
-    /* Loading screen */
-    #loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #f2f2f2;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
+    .thumb {
+      width: 100px;
+      height: 80px;
+      border-radius: 6px;
+      border: 2px solid #ddd;
+      cursor: pointer;
+      object-fit: cover;
+      background: #eee;
     }
 
-    #bar-container {
-      width: 300px;
-      height: 10px;
-      background: #ddd;
-      border-radius: 5px;
-      overflow: hidden;
-      margin-top: 10px;
+    .thumb:hover {
+      border-color: #111;
     }
 
-    #bar {
-      width: 0%;
-      height: 100%;
-      background: #111;
-      transition: width 0.2s ease;
+    #loading {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      z-index: 30;
     }
   </style>
 
-  <!-- Import map -->
   <script type="importmap">
   {
     "imports": {
@@ -67,17 +73,11 @@
 
 <body>
 
-<!-- Loading UI -->
-<div id="loading-screen">
-  <div id="loading-text">Loading 0%</div>
-  <div id="bar-container">
-    <div id="bar"></div>
-  </div>
-</div>
+<div id="loading">Loading...</div>
 
-<!-- UI -->
+<!-- ✅ RESTORED UI -->
 <div id="ui">
-  <label>Table Material:</label>
+  <label>Material:</label>
   <select id="materialSelect">
     <option value="wood">Wood</option>
     <option value="marble">Marble</option>
@@ -85,32 +85,34 @@
   </select>
 </div>
 
+<div id="gallery"></div>
+
 <script type="module">
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 let scene, camera, renderer, controls;
-let tableModel;
+let currentModel = null;
 let tableTopMesh = null;
 
 const textureLoader = new THREE.TextureLoader();
 
+const models = [
+  { name: "Table 1", url: "./assets/3dmodels/table.glb" },
+  { name: "Table 2", url: "./assets/3dmodels/classic_table.glb" },
+];
+
 init();
+createGallery();
+loadModel(models[0].url);
 animate();
 
 function init() {
 
-  // DOM loading elements
-  const loadingScreen = document.getElementById("loading-screen");
-  const loadingText = document.getElementById("loading-text");
-  const bar = document.getElementById("bar");
-
-  // Scene
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf2f2f2);
 
-  // Camera
   camera = new THREE.PerspectiveCamera(
     60,
     window.innerWidth / window.innerHeight,
@@ -119,99 +121,79 @@ function init() {
   );
   camera.position.set(2, 2, 3);
 
-  // Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  // Lights
   scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
-  const dirLight = new THREE.DirectionalLight(0xffffff, 2);
-  dirLight.position.set(5, 10, 5);
-  scene.add(dirLight);
+  const light = new THREE.DirectionalLight(0xffffff, 2);
+  light.position.set(5, 10, 5);
+  scene.add(light);
 
-  // Controls
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
-  controls.dampingFactor = 0.08;
-  controls.target.set(0, 0, 0);
 
-  // Load GLB
-  const loader = new GLTFLoader();
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
 
-  loader.load(
-    "./assets/3dmodels/classic_table.glb",
-
-    function (gltf) {
-      console.log("GLB loaded");
-
-      tableModel = gltf.scene;
-      scene.add(tableModel);
-
-      // Center model
-      const box = new THREE.Box3().setFromObject(tableModel);
-      const center = box.getCenter(new THREE.Vector3());
-      const size = box.getSize(new THREE.Vector3());
-
-      tableModel.position.sub(center);
-
-      const maxAxis = Math.max(size.x, size.y, size.z);
-      const scale = 2 / maxAxis;
-      tableModel.scale.setScalar(scale);
-
-      const box2 = new THREE.Box3().setFromObject(tableModel);
-      const center2 = box2.getCenter(new THREE.Vector3());
-      tableModel.position.sub(center2);
-
-      controls.target.set(0, 0, 0);
-
-      // Find tabletop mesh
-      tableModel.traverse((child) => {
-        if (child.isMesh) {
-          if (child.name.toLowerCase().includes("top")) {
-            tableTopMesh = child;
-          }
-        }
-      });
-
-      if (!tableTopMesh) {
-        tableModel.traverse((c) => {
-          if (c.isMesh && !tableTopMesh) tableTopMesh = c;
-        });
-      }
-
-      // Hide loading screen
-      loadingScreen.style.transition = "opacity 0.5s";
-      loadingScreen.style.opacity = 0;
-      setTimeout(() => loadingScreen.style.display = "none", 500);
-    },
-
-    function (xhr) {
-      if (xhr.total) {
-        const percent = (xhr.loaded / xhr.total) * 100;
-        loadingText.innerText = `Loading ${percent.toFixed(0)}%`;
-        bar.style.width = percent + "%";
-      } else {
-        loadingText.innerText = "Loading...";
-      }
-    },
-
-    function (err) {
-      console.error("GLB load error:", err);
-      loadingText.innerText = "Failed to load model";
-    }
-  );
-
-  // UI events
+  // ✅ MATERIAL SWITCH
   document.getElementById("materialSelect").addEventListener("change", (e) => {
     changeMaterial(e.target.value);
   });
+}
 
-  window.addEventListener("resize", onResize);
+function loadModel(url) {
+
+  const loader = new GLTFLoader();
+
+  loader.load(url, (gltf) => {
+
+    if (currentModel) scene.remove(currentModel);
+
+    currentModel = gltf.scene;
+    scene.add(currentModel);
+
+    // center
+    const box = new THREE.Box3().setFromObject(currentModel);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+
+    currentModel.position.sub(center);
+
+    const max = Math.max(size.x, size.y, size.z);
+    const dist = max * 1.6;
+
+    camera.position.set(dist, dist * 0.8, dist);
+    camera.lookAt(0, 0, 0);
+
+    controls.target.set(0, 0, 0);
+
+    // find tabletop
+    tableTopMesh = null;
+    currentModel.traverse((c) => {
+      if (c.isMesh) {
+        if (c.name.toLowerCase().includes("top")) {
+          tableTopMesh = c;
+        }
+      }
+    });
+
+    if (!tableTopMesh) {
+      currentModel.traverse((c) => {
+        if (c.isMesh && !tableTopMesh) tableTopMesh = c;
+      });
+    }
+
+    document.getElementById("loading").style.display = "none";
+  });
 }
 
 function changeMaterial(type) {
+
   if (!tableTopMesh) return;
 
   let mat;
@@ -248,10 +230,58 @@ function changeMaterial(type) {
   tableTopMesh.material = mat;
 }
 
-function onResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+function createGallery() {
+
+  const gallery = document.getElementById("gallery");
+  const loader = new GLTFLoader();
+
+  models.forEach((model) => {
+
+    const img = document.createElement("img");
+    img.className = "thumb";
+    gallery.appendChild(img);
+
+    loader.load(model.url, (gltf) => {
+
+      const tempScene = new THREE.Scene();
+
+      const obj = gltf.scene;
+      tempScene.add(obj);
+
+      tempScene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+      const light = new THREE.DirectionalLight(0xffffff, 2);
+      light.position.set(5, 5, 5);
+      tempScene.add(light);
+
+      const tempCam = new THREE.PerspectiveCamera(50, 200/150, 0.1, 1000);
+
+      const box = new THREE.Box3().setFromObject(obj);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+
+      obj.position.sub(center);
+
+      const max = Math.max(size.x, size.y, size.z);
+      const dist = max * 1.6;
+
+      tempCam.position.set(dist, dist * 0.8, dist);
+      tempCam.lookAt(0, 0, 0);
+
+      const tempRenderer = new THREE.WebGLRenderer({ antialias: true });
+
+      tempRenderer.setSize(200, 150);
+      tempRenderer.render(tempScene, tempCam);
+
+      img.src = tempRenderer.domElement.toDataURL();
+
+    });
+
+    img.addEventListener("click", () => {
+      loadModel(model.url);
+    });
+
+  });
 }
 
 function animate() {
