@@ -5,8 +5,13 @@
   <title>Table Configurator</title>
 
   <style>
-    body { margin: 0; overflow: hidden; font-family: sans-serif; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
 
+    /* UI panel */
     #ui {
       position: absolute;
       top: 12px;
@@ -15,6 +20,37 @@
       padding: 10px;
       border-radius: 8px;
       z-index: 10;
+    }
+
+    /* Loading screen */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #bar-container {
+      width: 300px;
+      height: 10px;
+      background: #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    #bar {
+      width: 0%;
+      height: 100%;
+      background: #111;
+      transition: width 0.2s ease;
     }
   </style>
 
@@ -31,6 +67,15 @@
 
 <body>
 
+<!-- Loading UI -->
+<div id="loading-screen">
+  <div id="loading-text">Loading 0%</div>
+  <div id="bar-container">
+    <div id="bar"></div>
+  </div>
+</div>
+
+<!-- UI -->
 <div id="ui">
   <label>Table Material:</label>
   <select id="materialSelect">
@@ -55,6 +100,12 @@ init();
 animate();
 
 function init() {
+
+  // DOM loading elements
+  const loadingScreen = document.getElementById("loading-screen");
+  const loadingText = document.getElementById("loading-text");
+  const bar = document.getElementById("bar");
+
   // Scene
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf2f2f2);
@@ -80,7 +131,7 @@ function init() {
   dirLight.position.set(5, 10, 5);
   scene.add(dirLight);
 
-  // Controls (🔥 drag to rotate)
+  // Controls
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
@@ -89,54 +140,70 @@ function init() {
   // Load GLB
   const loader = new GLTFLoader();
 
-  loader.load("./assets/3dmodels/classic_table.glb", (gltf) => {
-    console.log("GLB loaded");
+  loader.load(
+    "./assets/3dmodels/classic_table.glb",
 
-    tableModel = gltf.scene;
-    scene.add(tableModel);
+    function (gltf) {
+      console.log("GLB loaded");
 
-    // 🔥 CENTER MODEL PROPERLY
-    const box = new THREE.Box3().setFromObject(tableModel);
-    const center = box.getCenter(new THREE.Vector3());
-    const size = box.getSize(new THREE.Vector3());
+      tableModel = gltf.scene;
+      scene.add(tableModel);
 
-    tableModel.position.sub(center); // move to origin
+      // Center model
+      const box = new THREE.Box3().setFromObject(tableModel);
+      const center = box.getCenter(new THREE.Vector3());
+      const size = box.getSize(new THREE.Vector3());
 
-    // optional: auto scale to reasonable size
-    const maxAxis = Math.max(size.x, size.y, size.z);
-    const scale = 2 / maxAxis;
-    tableModel.scale.setScalar(scale);
+      tableModel.position.sub(center);
 
-    // re-center after scaling
-    const box2 = new THREE.Box3().setFromObject(tableModel);
-    const center2 = box2.getCenter(new THREE.Vector3());
-    tableModel.position.sub(center2);
+      const maxAxis = Math.max(size.x, size.y, size.z);
+      const scale = 2 / maxAxis;
+      tableModel.scale.setScalar(scale);
 
-    controls.target.set(0, 0, 0);
+      const box2 = new THREE.Box3().setFromObject(tableModel);
+      const center2 = box2.getCenter(new THREE.Vector3());
+      tableModel.position.sub(center2);
 
-    // Find tabletop mesh
-    tableModel.traverse((child) => {
-      if (child.isMesh) {
-        console.log("Mesh:", child.name);
+      controls.target.set(0, 0, 0);
 
-        if (child.name.toLowerCase().includes("top")) {
-          tableTopMesh = child;
+      // Find tabletop mesh
+      tableModel.traverse((child) => {
+        if (child.isMesh) {
+          if (child.name.toLowerCase().includes("top")) {
+            tableTopMesh = child;
+          }
         }
-      }
-    });
-
-    // fallback
-    if (!tableTopMesh) {
-      tableModel.traverse((c) => {
-        if (c.isMesh && !tableTopMesh) tableTopMesh = c;
       });
+
+      if (!tableTopMesh) {
+        tableModel.traverse((c) => {
+          if (c.isMesh && !tableTopMesh) tableTopMesh = c;
+        });
+      }
+
+      // Hide loading screen
+      loadingScreen.style.transition = "opacity 0.5s";
+      loadingScreen.style.opacity = 0;
+      setTimeout(() => loadingScreen.style.display = "none", 500);
+    },
+
+    function (xhr) {
+      if (xhr.total) {
+        const percent = (xhr.loaded / xhr.total) * 100;
+        loadingText.innerText = `Loading ${percent.toFixed(0)}%`;
+        bar.style.width = percent + "%";
+      } else {
+        loadingText.innerText = "Loading...";
+      }
+    },
+
+    function (err) {
+      console.error("GLB load error:", err);
+      loadingText.innerText = "Failed to load model";
     }
+  );
 
-  }, undefined, (err) => {
-    console.error("GLB load error:", err);
-  });
-
-  // UI
+  // UI events
   document.getElementById("materialSelect").addEventListener("change", (e) => {
     changeMaterial(e.target.value);
   });
@@ -151,6 +218,7 @@ function changeMaterial(type) {
 
   if (type === "wood") {
     const tex = textureLoader.load("./assets/textures/wood.jpg");
+    tex.colorSpace = THREE.SRGBColorSpace;
 
     mat = new THREE.MeshStandardMaterial({
       map: tex,
@@ -160,6 +228,7 @@ function changeMaterial(type) {
 
   if (type === "marble") {
     const tex = textureLoader.load("./assets/textures/marble.jpg");
+    tex.colorSpace = THREE.SRGBColorSpace;
 
     mat = new THREE.MeshStandardMaterial({
       map: tex,
@@ -179,7 +248,6 @@ function changeMaterial(type) {
   tableTopMesh.material = mat;
 }
 
-
 function onResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -188,8 +256,7 @@ function onResize() {
 
 function animate() {
   requestAnimationFrame(animate);
-
-  controls.update(); // 🔥 required for damping
+  controls.update();
   renderer.render(scene, camera);
 }
 </script>
