@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -7,11 +7,12 @@
 	<meta name="description" content="">
 	<meta name="author"      content="Sergey Pozhilov (GetTemplate.com)">
 	
-	<title>PierreDeChine - 花岗岩、大理石、石材</title>
+	<title>PierreDeChine - 花岗岩、大理石与天然石材</title>
 
 	<link rel="shortcut icon" href="assets/images/gt_favicon.png">
 	
 	<link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/css/font-awesome.min.css">
 
@@ -33,13 +34,13 @@
 			<div class="navbar-header">
 				<!-- Button for smallest screens -->
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-				<a class="navbar-brand" href="index-zh.html"><img src="assets/images/logo.png" alt="Progressus HTML5 template"></a>
+				<a class="navbar-brand" href="index.html"><img src="assets/images/logo.png" alt="Progressus HTML5 template"></a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
 					<li class="active"><a href="index-zh.html">首页</a></li>
-					<li><a href="about-zh.html">关于</a></li>
-					<li><a href="blog-zh.html">博客</a></li>
+					<li><a href="about-zh.html">关于我们</a></li>
+					<li><a href="canvas-zh.html">设计工作室</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">更多页面 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -47,7 +48,7 @@
 							<li><a href="sidebar-right.html">右侧边栏</a></li>
 						</ul>
 					</li>
-					<li><a href="contact-zh.html">联系</a></li>
+					<li><a href="contact-zh.html">联系我们</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe"></i> 语言 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -65,10 +66,14 @@
 
 	<!-- Header -->
 	<header id="head">
+		<video id="header-video" autoplay muted loop playsinline>
+			<source src="assets/videos/header-video.mp4" type="video/mp4">
+			<img src="assets/images/bg_header.jpg" alt="Header Background">
+		</video>
 		<div class="container">
 			<div class="row">
-				<h1 class="lead">花岗岩、大理石、石材</h1>
-				<p><a class="btn btn-default btn-lg" role="button">产品手册</a> <a class="btn btn-action btn-lg" role="button">下载</a></p>
+				<h1 class="lead">花岗岩 · 大理石 · 天然石材</h1>
+				<p><a class="btn btn-default btn-lg" role="button">产品手册</a> <a class="btn btn-action btn-lg" role="button">立即下载</a></p>
 			</div>
 		</div>
 	</header>
@@ -77,9 +82,9 @@
 	<!-- Intro -->
 	<div class="container text-center">
 		<br> <br>
-		<h2 class="thin">高品质空间，始于天然材质</h2>
+		<h2 class="thin">最美的空间，始于天然石材</h2>
 		<p class="text-muted">
-			从优雅餐桌到定制大理石作品，我们打造经久不衰的经典单品，提升日常生活品质。
+			从优雅的大理石餐桌到定制天然石材作品，我们打造兼具美感与实用性的经典设计，为您的生活空间增添永恒魅力。
 		</p>
 	</div>
 	<!-- /Intro-->
@@ -88,10 +93,21 @@
 	<div class="jumbotron top-space">
 		<div class="container">
 			
-			<h1 class="text-center thin">产品展示</h1>
-			
+			<h1 class="text-center thin">新品推荐</h1>
 			<div class="row" id="product-gallery-row">
 				<!-- Products loaded dynamically by product-gallery.js -->
+			</div> <!-- /row  -->
+			<h1 class="text-center thin">台面案例展示</h1> 
+			<div class="row" id="countertop-gallery-row">
+				<!-- Products loaded dynamically by countertop-gallery.js -->
+			</div> <!-- /row  -->
+			<h1 class="text-center thin">楼梯案例展示</h1> 
+			<div class="row" id="ladder-gallery-row">
+				<!-- Products loaded dynamically by ladder-gellery.js -->
+			</div> <!-- /row  -->
+			<h1 class="text-center thin">餐桌案例展示</h1>
+			<div class="row" id="table-gallery-row">
+				<!-- Products loaded dynamically by table-gellery.js -->
 			</div> <!-- /row  -->
 		
 		</div>
@@ -102,37 +118,36 @@
 	<div class="container">
 
 		<h2 class="text-center top-space">常见问题</h2>
-		<br>
+<br>
 
-		<div class="row">
-			<div class="col-sm-6">
-				<h3>大理石餐桌适合日常使用吗？</h3>
-				<p>是的。高品质大理石餐桌非常耐用，在正确保养下可使用数十年。大理石天然耐热且坚固，适用于餐桌、茶几以及高端室内空间。</p>
-			</div>
-			<div class="col-sm-6">
-				<h3>大理石容易染色吗？</h3>
-				<p>
-					大理石属于天然石材，若未做密封处理可能吸收液体。建议及时擦拭洒落液体，并使用杯垫或餐垫。我们的所有大理石产品都经过专业密封处理，以增强防污和防潮能力。</p>
-			</div>
-		</div> <!-- /row -->
+<div class="row">
+    <div class="col-sm-6">
+        <h3>大理石餐桌适合日常使用吗？</h3>
+        <p>
+            是的。优质大理石餐桌坚固耐用，在正确保养的情况下可使用数十年。大理石天然耐热、强度高，非常适合作为餐桌、茶几以及高端家居空间的选择。
+        </p>
+    </div>
+    <div class="col-sm-6">
+        <h3>大理石容易留下污渍吗？</h3>
+        <p>
+            大理石属于天然石材，若未进行适当保护，可能会吸收液体。我们建议及时擦拭洒落的液体，并使用杯垫或餐垫。我们的所有大理石产品均经过专业防护处理，可有效减少污渍和湿气渗透。
+        </p>
+    </div>
+</div>
 
-		<div class="row">
-			<div class="col-sm-6">
-				<h3>你们提供定制尺寸和款式吗？</h3>
-				<p>
-					是的。我们提供定制尺寸、石材选择、边型和底座设计，以匹配您的空间与风格需求。欢迎告知尺寸和设计想法，我们将提供个性化报价。 
-				</p>
-			</div>
-			<div class="col-sm-6">
-				<h3>每一件大理石作品都是独一无二的吗？</h3>
-				<p>当然。天然大理石在长期地质形成过程中会产生独特纹理、质感和色差。没有两张大理石桌完全相同，因此每一件都具有唯一性。</p>
-			</div>
-		</div> <!-- /row -->
-
-		<div class="jumbotron top-space">
-			<h4>Dicta, nostrum nemo soluta sapiente sit dolor quae voluptas quidem doloribus recusandae facere magni ullam suscipit sunt atque rerum eaque iusto facilis esse nam veniam incidunt officia perspiciatis at voluptatibus. Libero, aliquid illum possimus numquam fuga.</h4>
-     		<p class="text-right"><a class="btn btn-primary btn-large">了解更多 »</a></p>
-  		</div>
+<div class="row">
+    <div class="col-sm-6">
+        <h3>是否提供定制尺寸和设计服务？</h3>
+        <p>
+            当然可以。我们提供定制尺寸、石材选择、边缘造型以及桌脚设计，根据您的空间需求和装修风格量身打造。欢迎联系我们获取专属报价方案。
+        </p>
+    </div>
+    <div class="col-sm-6">
+        <h3>每块大理石都一样吗？</h3>
+        <p>
+            不会。天然大理石经过数百万年的地质形成过程，拥有独特的纹理、色彩和肌理变化。因此每一张大理石桌面都是独一无二的艺术品。
+        </p>
+    </div>
 
 </div>	<!-- /container -->
 	
@@ -153,9 +168,10 @@
 	</section>
 	<!-- /social links -->
 
-	<div id="footer"></div>
-	<script src="./footer.js"></script>
 
+	<div id="footer"></div>
+	<script src="./footer.js"></script>	
+		
 
 
 
@@ -166,6 +182,11 @@
 	<script src="assets/js/headroom.min.js"></script>
 	<script src="assets/js/jQuery.headroom.min.js"></script>
 	<script src="assets/js/template.js"></script>
-	<script src="assets/js/product-gallery.js"></script>
+
+	<script src="./assets/js/gallery-core.js"></script>
+	<script src="./assets/js/product-gallery.js"></script>
+	<script src="./assets/js/countertop-gallery.js"></script>
+	<script src="./assets/js/ladder-gallery.js"></script>
+	<script src="./assets/js/table-gallery.js"></script>
 </body>
 </html>
