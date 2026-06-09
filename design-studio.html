@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Studio — PierreDeChine</title>
+
+  <link rel="shortcut icon" href="assets/images/gt_favicon.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+
+  <style>
+    body {
+      overflow: hidden;
+      background: #141414;
+    }
+
+    /* ── Studio layout ── */
+    #studio {
+      position: fixed;
+      top: 100px;
+      left: 0; right: 0; bottom: 0;
+      display: flex;
+    }
+
+    /* ── Left toolbar ── */
+    #toolbar {
+      width: 68px;
+      background: #1c1c1c;
+      border-right: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 0;
+      gap: 5px;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .tool-section-label {
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.22);
+      margin: 4px 0 6px;
+    }
+
+    .tool-divider {
+      width: 36px;
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 6px 0;
+    }
+
+    .tool-btn {
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.18s ease;
+      padding: 0;
+    }
+    .tool-btn i { font-size: 15px; }
+    .tool-btn:hover {
+      background: rgba(201,169,110,0.12);
+      border-color: rgba(201,169,110,0.5);
+      color: #c9a96e;
+    }
+    .tool-btn.active {
+      background: rgba(201,169,110,0.18);
+      border-color: #c9a96e;
+      color: #c9a96e;
+    }
+    .tool-btn.danger:hover {
+      background: rgba(200,60,60,0.15);
+      border-color: rgba(200,60,60,0.6);
+      color: #e06060;
+    }
+
+    /* ── Canvas ── */
+    #canvas-area {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    #canvas-area canvas { display: block; }
+
+    #hint {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    #hint-text {
+      color: rgba(255,255,255,0.18);
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    #statusbar {
+      position: absolute;
+      bottom: 14px;
+      left: 16px;
+      color: rgba(255,255,255,0.25);
+      font-size: 11px;
+      letter-spacing: 0.07em;
+      pointer-events: none;
+    }
+
+    #shortcuts {
+      position: absolute;
+      bottom: 14px;
+      right: 16px;
+      color: rgba(255,255,255,0.18);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-align: right;
+      pointer-events: none;
+      line-height: 1.9;
+    }
+
+    /* ── Right material panel ── */
+    #mat-panel {
+      width: 0;
+      background: #1c1c1c;
+      border-left: 1px solid rgba(255,255,255,0.07);
+      overflow: hidden;
+      transition: width 0.25s ease;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+    #mat-panel.open { width: 200px; }
+
+    #mat-panel-inner {
+      width: 200px;
+      padding: 18px 14px;
+    }
+
+    .panel-label {
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+      margin-bottom: 8px;
+    }
+
+    #selected-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #c9a96e;
+      margin-bottom: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .mat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mat-swatch {
+      border-radius: 4px;
+      border: 2px solid rgba(255,255,255,0.08);
+      cursor: pointer;
+      overflow: hidden;
+      transition: border-color 0.18s ease, transform 0.18s ease;
+    }
+    .mat-swatch:hover {
+      border-color: rgba(255,255,255,0.35);
+      transform: translateY(-1px);
+    }
+    .mat-swatch.active {
+      border-color: #c9a96e;
+    }
+    .mat-color {
+      width: 100%;
+      height: 52px;
+    }
+    .mat-name {
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 5px 4px;
+      color: rgba(255,255,255,0.5);
+      background: #242424;
+    }
+    .mat-swatch.active .mat-name {
+      color: #c9a96e;
+    }
+  </style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top headroom">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index-en.html"><img src="assets/images/logo.png" alt="PierreDeChine"></a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav pull-right">
+        <li><a href="index-en.html">Home</a></li>
+        <li><a href="about-en.html">About</a></li>
+        <li class="active"><a href="design-studio.html">Design Studio</a></li>
+        <li><a href="contact-en.html">Contact</a></li>
+        <li><a class="btn" href="signin.html">SIGN IN</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Studio -->
+<div id="studio">
+
+  <!-- Left toolbar -->
+  <div id="toolbar">
+    <span class="tool-section-label">Add</span>
+
+    <button class="tool-btn" onclick="addShape('box')" title="Add Box">
+      <i class="fa fa-cube"></i>
+      <span>Box</span>
+    </button>
+    <button class="tool-btn" onclick="addShape('slab')" title="Add Flat Slab">
+      <i class="fa fa-minus"></i>
+      <span>Slab</span>
+    </button>
+    <button class="tool-btn" onclick="addShape('cylinder')" title="Add Cylinder">
+      <i class="fa fa-circle-o"></i>
+      <span>Cyl</span>
+    </button>
+
+    <div class="tool-divider"></div>
+    <span class="tool-section-label">Mode</span>
+
+    <button class="tool-btn active" id="btn-move" onclick="setMode('translate')" title="Move  G">
+      <i class="fa fa-arrows"></i>
+      <span>Move</span>
+    </button>
+    <button class="tool-btn" id="btn-rotate" onclick="setMode('rotate')" title="Rotate  R">
+      <i class="fa fa-refresh"></i>
+      <span>Rot</span>
+    </button>
+    <button class="tool-btn" id="btn-scale" onclick="setMode('scale')" title="Scale  S">
+      <i class="fa fa-expand"></i>
+      <span>Scale</span>
+    </button>
+
+    <div class="tool-divider"></div>
+
+    <button class="tool-btn danger" onclick="deleteSelected()" title="Delete  Del">
+      <i class="fa fa-trash-o"></i>
+      <span>Del</span>
+    </button>
+  </div>
+
+  <!-- 3D Canvas -->
+  <div id="canvas-area">
+    <div id="hint">
+      <div id="hint-text">Add a shape to start designing<br><span style="font-size:11px;opacity:0.6">Box · Slab · Cylinder</span></div>
+    </div>
+    <div id="statusbar"></div>
+    <div id="shortcuts">
+      G · Move &nbsp; R · Rotate &nbsp; S · Scale<br>
+      Del · Delete &nbsp; Esc · Deselect
+    </div>
+  </div>
+
+  <!-- Right material panel -->
+  <div id="mat-panel">
+    <div id="mat-panel-inner">
+      <div class="panel-label">Selected</div>
+      <div id="selected-name">—</div>
+      <div class="panel-label">Material</div>
+      <div class="mat-grid" id="mat-grid"></div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls }    from 'three/examples/jsm/controls/OrbitControls.js';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+
+// ── Scene ──────────────────────────────────────────────────────────────────
+
+const area = document.getElementById('canvas-area');
+
+const scene    = new THREE.Scene();
+scene.background = new THREE.Color(0x181818);
+scene.fog        = new THREE.FogExp2(0x181818, 0.06);
+
+const camera = new THREE.PerspectiveCamera(48, area.clientWidth / area.clientHeight, 0.01, 200);
+camera.position.set(3.5, 2.8, 3.5);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(area.clientWidth, area.clientHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+area.appendChild(renderer.domElement);
+
+// Lights
+scene.add(new THREE.AmbientLight(0xffffff, 0.45));
+
+const key = new THREE.DirectionalLight(0xfff5e8, 1.6);
+key.position.set(5, 9, 4);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.camera.near = 0.1;
+key.shadow.camera.far  = 40;
+key.shadow.camera.left = key.shadow.camera.bottom = -8;
+key.shadow.camera.right = key.shadow.camera.top   =  8;
+scene.add(key);
+
+const fill = new THREE.DirectionalLight(0xd0e8ff, 0.35);
+fill.position.set(-4, 3, -4);
+scene.add(fill);
+
+// Grid + floor
+scene.add(new THREE.GridHelper(12, 24, 0x2a2a2a, 0x262626));
+
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(12, 12),
+  new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 1, metalness: 0 })
+);
+floor.rotation.x = -Math.PI / 2;
+floor.position.y  = -0.001;
+floor.receiveShadow = true;
+scene.add(floor);
+
+// Controls
+const orbit = new OrbitControls(camera, renderer.domElement);
+orbit.enableDamping = true;
+orbit.dampingFactor = 0.08;
+orbit.target.set(0, 0.4, 0);
+
+const xform = new TransformControls(camera, renderer.domElement);
+xform.addEventListener('dragging-changed', e => { orbit.enabled = !e.value; });
+scene.add(xform);
+
+// ── Materials ──────────────────────────────────────────────────────────────
+
+const texLoader = new THREE.TextureLoader();
+
+function tex(path) {
+  const t = texLoader.load(path);
+  t.colorSpace  = THREE.SRGBColorSpace;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(2, 2);
+  return t;
+}
+
+const MATS = [
+  {
+    id: 'white-marble',
+    name: 'White Marble',
+    swatch: 'linear-gradient(135deg,#f0ece8 0%,#e4dcd4 50%,#ede6e0 100%)',
+    make: () => new THREE.MeshStandardMaterial({ map: tex('./assets/textures/marble.jpg'), roughness: 0.15, metalness: 0.04 })
+  },
+  {
+    id: 'black-granite',
+    name: 'Black Granite',
+    swatch: 'linear-gradient(135deg,#1a1a1a 0%,#222 60%,#111 100%)',
+    make: () => new THREE.MeshStandardMaterial({ color: 0x0f0f0f, roughness: 0.4, metalness: 0.25 })
+  },
+  {
+    id: 'grey-stone',
+    name: 'Grey Stone',
+    swatch: 'linear-gradient(135deg,#8a8a8a,#707070)',
+    make: () => new THREE.MeshStandardMaterial({ color: 0x787878, roughness: 0.88, metalness: 0 })
+  },
+  {
+    id: 'travertine',
+    name: 'Travertine',
+    swatch: 'linear-gradient(135deg,#d9c4a8,#c9b090)',
+    make: () => new THREE.MeshStandardMaterial({ color: 0xd0b898, roughness: 0.82, metalness: 0 })
+  },
+  {
+    id: 'dark-wood',
+    name: 'Dark Wood',
+    swatch: 'linear-gradient(135deg,#5c3d20,#4a2e14)',
+    make: () => new THREE.MeshStandardMaterial({ map: tex('./assets/textures/wood.jpg'), roughness: 0.88, metalness: 0 })
+  },
+  {
+    id: 'steel',
+    name: 'Brushed Steel',
+    swatch: 'linear-gradient(135deg,#b0b0b0,#888,#aaa)',
+    make: () => new THREE.MeshStandardMaterial({ color: 0x999999, roughness: 0.28, metalness: 0.9 })
+  },
+];
+
+// Build swatches
+const matGrid = document.getElementById('mat-grid');
+MATS.forEach(m => {
+  const sw = document.createElement('div');
+  sw.className   = 'mat-swatch';
+  sw.dataset.mid = m.id;
+  sw.innerHTML   = `<div class="mat-color" style="background:${m.swatch}"></div><div class="mat-name">${m.name}</div>`;
+  sw.addEventListener('click', () => applyMat(m.id));
+  matGrid.appendChild(sw);
+});
+
+// ── Shape definitions ──────────────────────────────────────────────────────
+
+const SHAPES = {
+  box: {
+    label: 'Box',
+    geo:   () => new THREE.BoxGeometry(0.9, 0.9, 0.9),
+    y:     0.45,
+    matId: 'white-marble',
+  },
+  slab: {
+    label: 'Slab',
+    geo:   () => new THREE.BoxGeometry(1.4, 0.08, 0.9),
+    y:     0.04,
+    matId: 'white-marble',
+  },
+  cylinder: {
+    label: 'Cylinder',
+    geo:   () => new THREE.CylinderGeometry(0.12, 0.12, 0.75, 40),
+    y:     0.375,
+    matId: 'steel',
+  },
+};
+
+const meshes  = [];
+const counter = {};
+let   sel     = null;
+
+// ── Add / delete ───────────────────────────────────────────────────────────
+
+window.addShape = function(type) {
+  const def  = SHAPES[type];
+  counter[type] = (counter[type] || 0) + 1;
+
+  const mat  = MATS.find(m => m.id === def.matId).make();
+  const mesh = new THREE.Mesh(def.geo(), mat);
+
+  const jitter = () => (Math.random() - 0.5) * 0.3;
+  mesh.position.set(jitter(), def.y, jitter());
+  mesh.castShadow    = true;
+  mesh.receiveShadow = true;
+  mesh.userData = { type, label: `${def.label} ${counter[type]}`, matId: def.matId };
+
+  scene.add(mesh);
+  meshes.push(mesh);
+  document.getElementById('hint').style.display = 'none';
+  select(mesh);
+};
+
+window.deleteSelected = function() {
+  if (!sel) return;
+  xform.detach();
+  scene.remove(sel);
+  meshes.splice(meshes.indexOf(sel), 1);
+  select(null);
+  if (meshes.length === 0) document.getElementById('hint').style.display = 'flex';
+};
+
+// ── Selection ──────────────────────────────────────────────────────────────
+
+function select(mesh) {
+  if (sel) sel.material.emissive?.set(0x000000);
+  sel = mesh;
+
+  const panel = document.getElementById('mat-panel');
+
+  if (mesh) {
+    mesh.material.emissive?.set(0x181005);
+    xform.attach(mesh);
+    panel.classList.add('open');
+    document.getElementById('selected-name').textContent = mesh.userData.label;
+    syncSwatches(mesh.userData.matId);
+  } else {
+    xform.detach();
+    panel.classList.remove('open');
+    document.getElementById('statusbar').textContent = '';
+  }
+}
+
+function syncSwatches(matId) {
+  document.querySelectorAll('.mat-swatch').forEach(sw =>
+    sw.classList.toggle('active', sw.dataset.mid === matId)
+  );
+}
+
+function applyMat(matId) {
+  if (!sel) return;
+  const def = MATS.find(m => m.id === matId);
+  sel.material = def.make();
+  sel.userData.matId = matId;
+  syncSwatches(matId);
+}
+
+// ── Transform mode ─────────────────────────────────────────────────────────
+
+const modeBtns = { translate: 'btn-move', rotate: 'btn-rotate', scale: 'btn-scale' };
+
+window.setMode = function(mode) {
+  xform.setMode(mode);
+  Object.entries(modeBtns).forEach(([m, id]) =>
+    document.getElementById(id).classList.toggle('active', m === mode)
+  );
+};
+
+// ── Click to select ────────────────────────────────────────────────────────
+
+const ray   = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let   downPos = null;
+
+renderer.domElement.addEventListener('pointerdown', e => {
+  downPos = { x: e.clientX, y: e.clientY };
+});
+
+renderer.domElement.addEventListener('pointerup', e => {
+  if (!downPos) return;
+  const dx   = e.clientX - downPos.x;
+  const dy   = e.clientY - downPos.y;
+  downPos = null;
+  if (Math.hypot(dx, dy) > 5) return; // was a drag
+
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
+  mouse.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
+  ray.setFromCamera(mouse, camera);
+
+  const shapeHit = ray.intersectObjects(meshes, false);
+  if (shapeHit.length > 0) {
+    select(shapeHit[0].object);
+    return;
+  }
+  // Don't deselect if we clicked the transform gizmo
+  if (ray.intersectObject(xform, true).length > 0) return;
+  select(null);
+});
+
+// ── Keyboard shortcuts ─────────────────────────────────────────────────────
+
+window.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+  if (e.key === 'g') setMode('translate');
+  if (e.key === 'r') setMode('rotate');
+  if (e.key === 's') setMode('scale');
+  if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); deleteSelected(); }
+  if (e.key === 'Escape') select(null);
+});
+
+// ── Resize ─────────────────────────────────────────────────────────────────
+
+const ro = new ResizeObserver(() => {
+  camera.aspect = area.clientWidth / area.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(area.clientWidth, area.clientHeight);
+});
+ro.observe(area);
+
+// ── Render loop ────────────────────────────────────────────────────────────
+
+function tick() {
+  requestAnimationFrame(tick);
+  orbit.update();
+  if (sel) {
+    const p = sel.position;
+    document.getElementById('statusbar').textContent =
+      `${sel.userData.label}  ·  x ${p.x.toFixed(2)}  y ${p.y.toFixed(2)}  z ${p.z.toFixed(2)}`;
+  }
+  renderer.render(scene, camera);
+}
+
+tick();
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+<script src="assets/js/headroom.min.js"></script>
+<script src="assets/js/jQuery.headroom.min.js"></script>
+</body>
+</html>
