@@ -1,32 +1,68 @@
 [
   {
     "id": 1,
-    "name": "Product 1",
-    "image": "image1.png",
-    "description": "Premium quality granite with exceptional durability and elegant finish"
+    "name": "Granite Countertop Classic",
+    "image": "Image_20260605203344_1171_13.jpg",
+    "description": "Premium granite countertop with exceptional durability and elegant finish"
   },
   {
     "id": 2,
-    "name": "Product 2",
-    "image": "image2.png",
-    "description": "Luxurious marble perfect for sophisticated interiors and countertops"
+    "name": "Marble Countertop Luxury",
+    "image": "Image_20260605203350_1172_13.jpg",
+    "description": "Luxurious marble countertop perfect for sophisticated kitchens and dining spaces"
   },
   {
     "id": 3,
-    "name": "Product 3",
-    "image": "image3.png",
-    "description": "Natural stone offering timeless beauty and lasting performance"
+    "name": "Stone Countertop Natural",
+    "image": "Image_20260605203405_1173_13.jpg",
+    "description": "Natural stone countertop offering timeless beauty and lasting performance"
   },
   {
     "id": 4,
-    "name": "Product 4",
-    "image": "image4.png",
-    "description": "Expertly crafted stone solutions for residential and commercial spaces"
+    "name": "Countertop Professional",
+    "image": "Image_20260605203414_1174_13.jpg",
+    "description": "Expertly crafted stone countertop for residential and commercial kitchens"
   },
   {
     "id": 5,
-    "name": "Product 5",
-    "image": "image4.png",
-    "description": "Expertly crafted stone solutions for residential and commercial spaces"
+    "name": "Countertop Premium",
+    "image": "Image_20260605203416_1175_13.jpg",
+    "description": "Premium quality countertop combining aesthetics with exceptional durability"
+  },
+  {
+    "id": 6,
+    "name": "Countertop Modern",
+    "image": "Image_20260605203532_1176_13.jpg",
+    "description": "Contemporary countertop design for modern kitchens and contemporary spaces"
+  },
+  {
+    "id": 7,
+    "name": "Countertop Elegant",
+    "image": "Image_20260605203534_1177_13.jpg",
+    "description": "Elegant stone countertop adding sophistication to any kitchen design"
+  },
+  {
+    "id": 8,
+    "name": "Countertop Durable",
+    "image": "Image_20260605203537_1178_13.jpg",
+    "description": "Highly durable countertop designed for intensive kitchen use and lasting appeal"
+  },
+  {
+    "id": 9,
+    "name": "Countertop Timeless",
+    "image": "Image_20260605203540_1179_13.jpg",
+    "description": "Timeless countertop style that complements any kitchen aesthetic"
+  },
+  {
+    "id": 10,
+    "name": "Countertop Refined",
+    "image": "Image_20260605203542_1180_13.jpg",
+    "description": "Refined stone countertop bringing luxury and elegance to your kitchen"
+  },
+  {
+    "id": 11,
+    "name": "Countertop Masterpiece",
+    "image": "Image_20260605203545_1181_13.jpg",
+    "description": "Masterpiece countertop combining function with fine aesthetic craftsmanship"
   }
 ]

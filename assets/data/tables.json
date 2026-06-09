@@ -1,32 +1,74 @@
 [
   {
     "id": 1,
-    "name": "Product 1",
-    "image": "image1.png",
-    "description": "Premium quality granite with exceptional durability and elegant finish"
+    "name": "Granite Dining Table",
+    "image": "Image_20260605204211_1195_13.jpg",
+    "description": "Premium granite dining table with exceptional durability and elegant design"
   },
   {
     "id": 2,
-    "name": "Product 2",
-    "image": "image2.png",
-    "description": "Luxurious marble perfect for sophisticated interiors and countertops"
+    "name": "Marble Table Luxury",
+    "image": "Image_20260605204232_1196_13.jpg",
+    "description": "Luxurious marble dining table perfect for sophisticated dining spaces"
   },
   {
     "id": 3,
-    "name": "Product 3",
-    "image": "image3.png",
-    "description": "Natural stone offering timeless beauty and lasting performance"
+    "name": "Stone Table Natural",
+    "image": "Image_20260605204238_1197_13.jpg",
+    "description": "Natural stone table offering timeless beauty and lasting performance"
   },
   {
     "id": 4,
-    "name": "Product 4",
-    "image": "image4.png",
-    "description": "Expertly crafted stone solutions for residential and commercial spaces"
+    "name": "Table Professional",
+    "image": "Image_20260605204248_1198_13.jpg",
+    "description": "Expertly crafted stone dining table for residential and commercial spaces"
   },
   {
     "id": 5,
-    "name": "Product 5",
-    "image": "image4.png",
-    "description": "Expertly crafted stone solutions for residential and commercial spaces"
+    "name": "Table Premium",
+    "image": "Image_20260605204254_1199_13.jpg",
+    "description": "Premium quality stone table combining aesthetics with exceptional durability"
+  },
+  {
+    "id": 6,
+    "name": "Table Modern",
+    "image": "Image_20260605204306_1200_13.jpg",
+    "description": "Contemporary stone table design for modern dining rooms and spaces"
+  },
+  {
+    "id": 7,
+    "name": "Table Elegant",
+    "image": "Image_20260605204312_1201_13.jpg",
+    "description": "Elegant stone dining table adding sophistication to any interior design"
+  },
+  {
+    "id": 8,
+    "name": "Table Durable",
+    "image": "Image_20260605204321_1202_13.jpg",
+    "description": "Highly durable stone table designed for intensive use and lasting appeal"
+  },
+  {
+    "id": 9,
+    "name": "Table Timeless",
+    "image": "Image_20260605204349_1203_13.jpg",
+    "description": "Timeless stone table style that complements any interior aesthetic"
+  },
+  {
+    "id": 10,
+    "name": "Table Refined",
+    "image": "Image_20260605204407_1204_13.jpg",
+    "description": "Refined stone table bringing luxury and elegance to your dining room"
+  },
+  {
+    "id": 11,
+    "name": "Table Masterpiece",
+    "image": "Image_20260605204437_1205_13.jpg",
+    "description": "Masterpiece stone dining table combining function with fine aesthetic craftsmanship"
+  },
+  {
+    "id": 12,
+    "name": "Table Statement",
+    "image": "Image_20260605204509_1206_13.jpg",
+    "description": "Statement piece stone table creating a stunning focal point in any dining space"
   }
 ]

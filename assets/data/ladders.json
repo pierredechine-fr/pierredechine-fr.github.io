@@ -1,32 +1,68 @@
 [
   {
     "id": 1,
-    "name": "Product 1",
-    "image": "image1.png",
-    "description": "Premium quality granite with exceptional durability and elegant finish"
+    "name": "Stone Ladder Premium",
+    "image": "Image_20260605203837_1183_13.jpg",
+    "description": "Premium quality stone ladder with exceptional durability and elegant finish"
   },
   {
     "id": 2,
-    "name": "Product 2",
-    "image": "image2.png",
-    "description": "Luxurious marble perfect for sophisticated interiors and countertops"
+    "name": "Marble Ladder Luxury",
+    "image": "Image_20260605203859_1184_13.jpg",
+    "description": "Luxurious marble ladder perfect for sophisticated interiors and entryways"
   },
   {
     "id": 3,
-    "name": "Product 3",
-    "image": "image3.png",
-    "description": "Natural stone offering timeless beauty and lasting performance"
+    "name": "Stone Ladder Natural",
+    "image": "Image_20260605203905_1185_13.jpg",
+    "description": "Natural stone ladder offering timeless beauty and lasting performance"
   },
   {
     "id": 4,
-    "name": "Product 4",
-    "image": "image4.png",
-    "description": "Expertly crafted stone solutions for residential and commercial spaces"
+    "name": "Ladder Professional",
+    "image": "Image_20260605203913_1186_13.jpg",
+    "description": "Expertly crafted stone ladder for residential and commercial applications"
   },
   {
     "id": 5,
-    "name": "Product 5",
-    "image": "image4.png",
-    "description": "Expertly crafted stone solutions for residential and commercial spaces"
+    "name": "Ladder Premium",
+    "image": "Image_20260605203919_1187_13.jpg",
+    "description": "Premium quality stone ladder combining aesthetics with exceptional durability"
+  },
+  {
+    "id": 6,
+    "name": "Ladder Modern",
+    "image": "Image_20260605203926_1188_13.jpg",
+    "description": "Contemporary stone ladder design for modern homes and contemporary spaces"
+  },
+  {
+    "id": 7,
+    "name": "Ladder Elegant",
+    "image": "Image_20260605203936_1189_13.jpg",
+    "description": "Elegant stone ladder adding sophistication to any architectural design"
+  },
+  {
+    "id": 8,
+    "name": "Ladder Durable",
+    "image": "Image_20260605204005_1190_13.jpg",
+    "description": "Highly durable stone ladder designed for long-term use and lasting appeal"
+  },
+  {
+    "id": 9,
+    "name": "Ladder Timeless",
+    "image": "Image_20260605204019_1191_13.jpg",
+    "description": "Timeless stone ladder style that complements any architectural aesthetic"
+  },
+  {
+    "id": 10,
+    "name": "Ladder Refined",
+    "image": "Image_20260605204024_1192_13.jpg",
+    "description": "Refined stone ladder bringing luxury and elegance to your home"
+  },
+  {
+    "id": 11,
+    "name": "Ladder Masterpiece",
+    "image": "Image_20260605204155_1194_13.jpg",
+    "description": "Masterpiece stone ladder combining function with fine aesthetic craftsmanship"
   }
 ]
