@@ -420,6 +420,7 @@ img.pull-left { margin-right: 10px; }
   background: #000;
   display: block;
   text-decoration: none;
+  cursor: pointer;
 }
 .video-wrapper iframe {
   position: absolute;

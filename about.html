@@ -84,10 +84,10 @@
 					<h1 class="page-title">À propos de nous</h1>
 				</header>
 				<h3>Lorem ipsum</h3>
-				<a class="video-wrapper" href="https://youtu.be/MXweYb9anc4" target="_blank" rel="noopener">
+				<div class="video-wrapper" data-video-id="MXweYb9anc4">
 					<img src="https://img.youtube.com/vi/MXweYb9anc4/hqdefault.jpg" alt="Voir la vidéo" loading="lazy">
 					<div class="video-play-btn"></div>
-				</a>
+				</div>
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, consequuntur eius repellendus eos aliquid molestiae ea laborum ex quibusdam laudantium voluptates placeat consectetur quam aliquam beatae soluta accusantium iusto nihil nesciunt unde veniam magnam repudiandae sapiente.</p>
 				<p>Quos, aliquam nam velit impedit minus tenetur beatae voluptas facere sint pariatur! Voluptatibus, quisquam, error, est assumenda corporis inventore illo nesciunt iure aut dolor possimus repellat minima veniam alias eius!</p>
 				<h3>Nécessité</h3>
@@ -132,5 +132,14 @@
 	<script src="assets/js/headroom.min.js"></script>
 	<script src="assets/js/jQuery.headroom.min.js"></script>
 	<script src="assets/js/template.js"></script>
+	<script>
+		document.querySelectorAll('.video-wrapper[data-video-id]').forEach(function(wrapper) {
+			wrapper.style.cursor = 'pointer';
+			wrapper.addEventListener('click', function() {
+				var id = wrapper.dataset.videoId;
+				wrapper.innerHTML = '<iframe src="https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+			});
+		});
+	</script>
 </body>
 </html>
