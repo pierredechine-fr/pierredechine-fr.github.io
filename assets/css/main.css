@@ -408,6 +408,63 @@ img.pull-left { margin-right: 10px; }
 .widget-simplenav a { margin: 0 5px; }
 
 /* ============================================
+   RESPONSIVE VIDEO EMBED
+   ============================================ */
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  background: #000;
+  display: block;
+  text-decoration: none;
+}
+.video-wrapper iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 0;
+}
+.video-wrapper img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: opacity 0.25s ease;
+}
+.video-wrapper:hover img {
+  opacity: 0.75;
+}
+.video-play-btn {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px; height: 68px;
+  background: rgba(0,0,0,0.72);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+.video-play-btn::after {
+  content: '';
+  display: block;
+  width: 0; height: 0;
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid transparent;
+  border-left: 22px solid #fff;
+  margin-left: 5px;
+}
+.video-wrapper:hover .video-play-btn {
+  background: #c9a96e;
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* ============================================
    LOADING SCREEN
    ============================================ */
 #loading-screen {

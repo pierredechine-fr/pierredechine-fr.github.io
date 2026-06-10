@@ -284,6 +284,18 @@
       <i class="fa fa-trash-o"></i>
       <span>Del</span>
     </button>
+
+    <div class="tool-divider"></div>
+    <span class="tool-section-label">Save</span>
+
+    <button class="tool-btn" onclick="saveImage()" title="Save viewport as PNG">
+      <i class="fa fa-camera"></i>
+      <span>PNG</span>
+    </button>
+    <button class="tool-btn" onclick="saveGLB()" title="Export shapes as GLB model">
+      <i class="fa fa-download"></i>
+      <span>GLB</span>
+    </button>
   </div>
 
   <!-- 3D Canvas -->
@@ -314,6 +326,7 @@
 import * as THREE from 'three';
 import { OrbitControls }    from 'three/examples/jsm/controls/OrbitControls.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+import { GLTFExporter }       from 'three/examples/jsm/exporters/GLTFExporter.js';
 
 // ── Scene ──────────────────────────────────────────────────────────────────
 
@@ -326,7 +339,7 @@ scene.fog        = new THREE.FogExp2(0x181818, 0.06);
 const camera = new THREE.PerspectiveCamera(48, area.clientWidth / area.clientHeight, 0.01, 200);
 camera.position.set(3.5, 2.8, 3.5);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(area.clientWidth, area.clientHeight);
 renderer.shadowMap.enabled = true;
@@ -568,6 +581,41 @@ renderer.domElement.addEventListener('pointerup', e => {
   if (ray.intersectObject(xform, true).length > 0) return;
   select(null);
 });
+
+// ── Save ───────────────────────────────────────────────────────────────────
+
+window.saveImage = function() {
+  renderer.render(scene, camera);   // ensure buffer is current
+  const link = document.createElement('a');
+  link.download = 'design.png';
+  link.href     = renderer.domElement.toDataURL('image/png');
+  link.click();
+};
+
+window.saveGLB = function() {
+  if (meshes.length === 0) {
+    alert('Add at least one shape before exporting.');
+    return;
+  }
+  const exporter = new GLTFExporter();
+  const group    = new THREE.Group();
+  meshes.forEach(m => group.add(m.clone()));
+
+  exporter.parse(
+    group,
+    result => {
+      const blob = new Blob([result], { type: 'application/octet-stream' });
+      const url  = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = 'design.glb';
+      link.href     = url;
+      link.click();
+      URL.revokeObjectURL(url);
+    },
+    err => console.error('GLB export failed:', err),
+    { binary: true }
+  );
+};
 
 // ── Keyboard shortcuts ─────────────────────────────────────────────────────
 
